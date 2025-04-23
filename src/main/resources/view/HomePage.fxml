@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="795.0" prefWidth="1535.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.ormsmhtc.controller.homepageController">
+   <children>
+      <Pane prefHeight="989.0" prefWidth="252.0" style="-fx-background-color: #AFF0F0;">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutX="31.0" layoutY="88.0" prefHeight="536.0" prefWidth="191.0" spacing="50.0">
+               <children>
+                  <Button fx:id="btnTherpist" mnemonicParsing="false" onAction="#navigateToTherapist" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Therapist " textFill="#863b3b">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnTherapyProgran" mnemonicParsing="false" onAction="#navigateToTherapyProgram" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Therapy Program">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnAssignToProgram" mnemonicParsing="false" onAction="#navigateToAssignProgram" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Assign to program">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnUserManage" mnemonicParsing="false" onAction="#navigateToUserManagePage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="User Manage">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnPatientManage" mnemonicParsing="false" onAction="#navigateToPatient" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Patient Manage">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnRegisterProgram" mnemonicParsing="false" onAction="#navigateRegisterPage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Register to Programs">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnTherapySession" mnemonicParsing="false" onAction="#navigateToTherapySession" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Theropy Session">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnPayments" mnemonicParsing="false" onAction="#navigateToPayment" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Payments">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnReports" mnemonicParsing="false" onAction="#navigateToReports" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Reports">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </VBox>
+            <Label alignment="CENTER" layoutX="65.0" layoutY="24.0" onMouseClicked="#navigateToHomePage" prefHeight="27.0" prefWidth="122.0" text="Home">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="bodyPane" layoutX="268.0" layoutY="1.0" prefHeight="990.0" prefWidth="1783.0" style="-fx-background-color: #CFE2F3;">
+         <children>
+            <ImageView fitHeight="1000.0" fitWidth="1772.0" layoutY="143.0" opacity="0.55" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/background.jpg" />
+               </image>
+            </ImageView>
+            <VBox layoutX="76.0" layoutY="187.0" prefHeight="671.0" prefWidth="276.0" spacing="25.0">
+               <children>
+                  <AnchorPane opacity="0.61" prefHeight="232.0" prefWidth="246.0" style="-fx-background-color: blue;">
+                     <children>
+                        <Label layoutX="73.0" layoutY="47.0" prefHeight="38.0" prefWidth="97.0" text="APPOIMENT" textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblAppoiment" layoutX="97.0" layoutY="86.0" prefHeight="38.0" prefWidth="48.0" text="0" textAlignment="CENTER">
+                           <font>
+                              <Font size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane opacity="0.64" prefHeight="221.0" prefWidth="259.0" style="-fx-background-color: blue;">
+                     <children>
+                        <Label layoutX="73.0" layoutY="41.0" prefHeight="38.0" prefWidth="97.0" text="PATION" textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblPation" layoutX="85.0" layoutY="95.0" prefHeight="38.0" prefWidth="48.0" text="0" textAlignment="CENTER">
+                           <font>
+                              <Font size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane opacity="0.76" prefHeight="246.0" prefWidth="243.0" style="-fx-background-color: blue;">
+                     <children>
+                        <Label layoutX="64.0" layoutY="34.0" prefHeight="38.0" prefWidth="97.0" text="THERAPHYS" textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblTheraphy" layoutX="85.0" layoutY="87.0" prefHeight="38.0" prefWidth="48.0" text="0" textAlignment="CENTER">
+                           <font>
+                              <Font size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

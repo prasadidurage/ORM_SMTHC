@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="mainpain" prefHeight="1000.0" prefWidth="1836.0" style="-fx-background-color: #ffff; -fx-border-color: black;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.ormsmhtc.controller.loginController">
+   <children>
+      <AnchorPane layoutX="29.0" layoutY="33.0" prefHeight="888.0" prefWidth="963.0" style="-fx-background-color: white;">
+         <children>
+            <ImageView fitHeight="663.0" fitWidth="952.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/lohgin%20page.gif" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="318.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="loginpane" layoutX="1104.0" layoutY="193.0" prefHeight="465.0" prefWidth="584.0" style="-fx-background-color: #AFF0F0;">
+         <children>
+            <VBox layoutX="42.0" layoutY="136.0" prefHeight="106.0" prefWidth="477.0">
+               <children>
+                  <HBox prefHeight="38.0" prefWidth="326.0">
+                     <children>
+                        <Label fx:id="lblusername" prefHeight="28.0" prefWidth="157.0" text="User Name" />
+                        <TextField fx:id="txtusername" prefHeight="26.0" prefWidth="327.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="504.0">
+                     <children>
+                        <Label fx:id="lblpassword" prefHeight="28.0" prefWidth="157.0" text="password" />
+                        <PasswordField fx:id="txtpassword" prefHeight="26.0" prefWidth="327.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Button fx:id="btnlogitn" layoutX="375.0" layoutY="233.0" mnemonicParsing="false" onAction="#login" prefHeight="38.0" prefWidth="157.0" style="-fx-border-radius: 50px; -fx-background-radius: 50px;" text="login" />
+            <Label layoutX="27.0" layoutY="79.0" prefHeight="17.0" prefWidth="394.0" text="Already have an account?" textFill="#075421" />
+            <VBox layoutX="108.0" layoutY="400.0" prefHeight="51.0" prefWidth="357.0">
+               <children>
+                  <Label prefHeight="52.0" prefWidth="356.0" text="© 2025 Serenity Mental Health Therapy Center. All Rights " />
+               </children>
+            </VBox>
+            <Label layoutX="312.0" layoutY="317.0" prefHeight="17.0" prefWidth="141.0" text="Don't have an account ?" />
+            <Line endX="549.01806640625" endY="300.16363525390625" startX="39.345458984375" startY="300.16363525390625" />
+            <Label fx:id="lblsingup" layoutX="447.0" layoutY="312.0" onMouseClicked="#navtosingup" prefHeight="26.0" prefWidth="111.0" text="sign up" textAlignment="CENTER" textFill="#0c660a">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
