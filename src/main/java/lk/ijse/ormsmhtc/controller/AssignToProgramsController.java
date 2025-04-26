@@ -10,13 +10,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import lk.ijse.ormsmhtc.bo.custom.impl.TherapistBOImpl;
-import lk.ijse.ormsmhtc.bo.custom.impl.TherapistProgramBOImpl;
-import lk.ijse.ormsmhtc.bo.custom.impl.TherapyProgramBOImpl;
-import lk.ijse.ormsmhtc.dto.Custom;
+import lk.ijse.ormsmhtc.bo.BOFactory;
+import lk.ijse.ormsmhtc.bo.custom.impl.*;
+import lk.ijse.ormsmhtc.dto.CustomDto;
 import lk.ijse.ormsmhtc.dto.TherapistProgramDto;
 import lk.ijse.ormsmhtc.dto.tm.AvailableTimeTM;
 import lk.ijse.ormsmhtc.dto.tm.TherapistProgramTM;
+import lk.ijse.ormsmhtc.util.Validation;
 
 import java.net.URL;
 import java.time.LocalTime;
@@ -93,9 +93,9 @@ public class AssignToProgramsController implements Initializable {
     @FXML
     private TextField txtStartTime;
 
-    TherapistBOImpl therapistBO = new TherapistBOImpl();
-    TherapyProgramBOImpl therapyProgramBO = new TherapyProgramBOImpl();
-    TherapistProgramBOImpl therapistProgramBO = new TherapistProgramBOImpl();
+    TherapistBOImpl therapistBO = (TherapistBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST);
+    TherapyProgramBOImpl therapyProgramBO = (TherapyProgramBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
+    TherapistProgramBOImpl therapistProgramBO = (TherapistProgramBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST_PROGRAM);
 
     @FXML
     void getAvailableTime(ActionEvent event) {
@@ -147,18 +147,34 @@ public class AssignToProgramsController implements Initializable {
         String programId = cmbPrograms.getValue();
         String therapistId = cmbTherapist.getValue();
         String day = cmbDays.getValue();
-        LocalTime startTime = LocalTime.parse(txtStartTime.getText());
-        LocalTime endTime = LocalTime.parse(txtEndTime.getText());
-        boolean isSaved = therapistProgramBO.saveTherapistProgram(programId,
-                therapistId,
-                day,
-                startTime,
-                endTime);
-        if (isSaved){
-           new Alert(Alert.AlertType.INFORMATION,"Assign Program Successfully Done").show();
-           loadPage();
-        }else{
-            new Alert(Alert.AlertType.INFORMATION,"Assign Program Not Successfully Done").show();
+        boolean isStartTime = Validation.isValid(txtStartTime.getText(),"time");
+        boolean isEndTime = Validation.isValid(txtEndTime.getText(),"time");
+        if (!isStartTime){
+            txtStartTime.setStyle("-fx-border-color: red");
+        }else {
+            txtStartTime.setStyle("-fx-border-color: black");
+        }
+        if (!isEndTime){
+            txtEndTime.setStyle("-fx-border-color: red");
+        }else {
+            txtEndTime.setStyle("-fx-border-color: black");
+        }
+        if (isStartTime && isEndTime && programId != null && therapistId != null && day != null) {
+            LocalTime startTime = LocalTime.parse(txtStartTime.getText());
+            LocalTime endTime = LocalTime.parse(txtEndTime.getText());
+            boolean isSaved = therapistProgramBO.saveTherapistProgram(programId,
+                    therapistId,
+                    day,
+                    startTime,
+                    endTime);
+            if (isSaved) {
+                new Alert(Alert.AlertType.INFORMATION, "Assign Program Successfully Done").show();
+                loadPage();
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Assign Program Not Successfully Done").show();
+            }
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Invalid Input").show();
         }
     }
 
@@ -184,18 +200,33 @@ public class AssignToProgramsController implements Initializable {
         String programId = cmbPrograms.getValue();
         String therapistId = cmbTherapist.getValue();
         String day = cmbDays.getValue();
-        LocalTime startTime = LocalTime.parse(txtStartTime.getText());
-        LocalTime endTime = LocalTime.parse(txtEndTime.getText());
-        boolean isUpdate = therapistProgramBO.updateTherapistProgram(programId,
-                therapistId,
-                day,
-                startTime,
-                endTime);
-        if (isUpdate){
-            new Alert(Alert.AlertType.INFORMATION,"Update Program Details Successfully").show();
-            loadPage();
-        }else{
-            new Alert(Alert.AlertType.INFORMATION,"Update Program Details Not Successfully").show();
+        boolean isStartTime = Validation.isValid(txtStartTime.getText(),"time");
+        boolean isEndTime = Validation.isValid(txtEndTime.getText(),"time");
+        if (!isStartTime){
+            txtStartTime.setStyle("-fx-border-color: red");
+        }else {
+            txtStartTime.setStyle("-fx-border-color: black");
+        }
+        if (!isEndTime){
+            txtEndTime.setStyle("-fx-border-color: red");
+        }else {
+            txtEndTime.setStyle("-fx-border-color: black");
+        }
+        if (isStartTime && isEndTime && programId != null && therapistId != null && day != null) {
+
+            LocalTime startTime = LocalTime.parse(txtStartTime.getText());
+            LocalTime endTime = LocalTime.parse(txtEndTime.getText());
+            boolean isUpdate = therapistProgramBO.updateTherapistProgram(programId,
+                    therapistId,
+                    day,
+                    startTime,
+                    endTime);
+            if (isUpdate) {
+                new Alert(Alert.AlertType.INFORMATION, "Update Program Details Successfully").show();
+                loadPage();
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Update Program Details Not Successfully").show();
+            }
         }
     }
 
@@ -270,7 +301,7 @@ public class AssignToProgramsController implements Initializable {
     }
 
     public void getAvailableTimes(String therapistId) {
-        ArrayList<Custom> timeSlot = therapistProgramBO.getAvailableTime(therapistId);
+        ArrayList<CustomDto> timeSlot = therapistProgramBO.getAvailableTime(therapistId);
         ObservableList<AvailableTimeTM> timeTMS = FXCollections.observableArrayList();
 
         ArrayList<String> daysOfWeek = new ArrayList<>(Arrays.asList(
@@ -280,9 +311,9 @@ public class AssignToProgramsController implements Initializable {
         for (String day : daysOfWeek) {
             StringBuilder availableTimes = new StringBuilder();
 
-            for (Custom custom : timeSlot) {
-                if (custom.getDay().equalsIgnoreCase(day)) {
-                    availableTimes.append(custom.getAvailableTimeList()).append(", ");
+            for (CustomDto customDto : timeSlot) {
+                if (customDto.getDay().equalsIgnoreCase(day)) {
+                    availableTimes.append(customDto.getAvailableTimeList()).append(", ");
                 }
             }
 

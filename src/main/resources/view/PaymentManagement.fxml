@@ -8,11 +8,18 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <Pane fx:id="userPane" prefHeight="754.0" prefWidth="1252.0" style="-fx-background-color: White;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.ormsmhtc.controller.PaymentController">
    <children>
+      <ImageView fitHeight="744.0" fitWidth="1252.0" layoutX="2.0" opacity="0.42" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assest/backgrounttt.jpg" />
+         </image>
+      </ImageView>
       <Group layoutX="109.0" layoutY="191.0">
          <children>
             <Group />
@@ -56,22 +63,22 @@
       </TableView>
       <Group layoutX="110.0" layoutY="415.0">
          <children>
-            <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#donePayment" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #cfe2f3; -fx-text-fill: black; -fx-background-radius: 20px;" text="Pay">
+            <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#donePayment" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #cfe2f3; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: black;" text="Pay">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btnUpdate" layoutX="237.0" mnemonicParsing="false" onAction="#updatePayment" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #cfe2f3; -fx-text-fill: black; -fx-background-radius: 20px;" text="Update">
+            <Button fx:id="btnUpdate" layoutX="237.0" mnemonicParsing="false" onAction="#updatePayment" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #cfe2f3; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-color: black; -fx-border-radius: 20px;" text="Update">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btnDelete" layoutX="483.0" mnemonicParsing="false" onAction="#deletePayment" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #cfe2f3; -fx-text-fill: black; -fx-background-radius: 20px;" text="Delete">
+            <Button fx:id="btnDelete" layoutX="543.0" mnemonicParsing="false" onAction="#deletePayment" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #cfe2f3; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-color: black; -fx-border-radius: 20px;" text="Delete">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btnReset" layoutX="849.0" mnemonicParsing="false" onAction="#resetPage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #cfe2f3; -fx-text-fill: black; -fx-background-radius: 20px;" text="Reset">
+            <Button fx:id="btnReset" layoutX="849.0" mnemonicParsing="false" onAction="#resetPage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #cfe2f3; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-color: black; -fx-border-radius: 20px;" text="Reset">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

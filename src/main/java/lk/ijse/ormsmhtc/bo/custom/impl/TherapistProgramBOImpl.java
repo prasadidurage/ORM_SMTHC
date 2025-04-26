@@ -1,9 +1,10 @@
 package lk.ijse.ormsmhtc.bo.custom.impl;
 
 
-
+import lk.ijse.ormsmhtc.bo.custom.TherapistProgramBO;
+import lk.ijse.ormsmhtc.dao.DAOFactory;
 import lk.ijse.ormsmhtc.dao.custom.impl.TherapistProgramDAOImpl;
-import lk.ijse.ormsmhtc.dto.Custom;
+import lk.ijse.ormsmhtc.dto.CustomDto;
 import lk.ijse.ormsmhtc.dto.TherapistProgramDto;
 import lk.ijse.ormsmhtc.entity.TherapistProgram;
 import lk.ijse.ormsmhtc.entity.TherapistProgramId;
@@ -12,8 +13,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TherapistProgramBOImpl {
-    TherapistProgramDAOImpl therapistProgramDAO = new TherapistProgramDAOImpl();
+public class TherapistProgramBOImpl implements TherapistProgramBO {
+    TherapistProgramDAOImpl therapistProgramDAO = (TherapistProgramDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPIST_PROGRAM);
 
     public boolean saveTherapistProgram(String programId, String therapistId, String day, LocalTime startTime, LocalTime endTime) {
 //        TherapyProgram therapyProgram = new TherapyProgram();
@@ -59,16 +60,16 @@ public class TherapistProgramBOImpl {
         return therapyID;
     }
 
-    public ArrayList<Custom> getAvailableTime(String therapistID) {
+    public ArrayList<CustomDto> getAvailableTime(String therapistID) {
         List<TherapistProgram> programList = therapistProgramDAO.getDataWiseTherapist(therapistID);
-        ArrayList<Custom> results = new ArrayList<>();
+        ArrayList<CustomDto> results = new ArrayList<>();
 
         // Define the full day time range
         LocalTime startOfDay = LocalTime.of(8, 0); // 8:00 AM
         LocalTime endOfDay = LocalTime.of(23, 59); // 11:59 PM
 
         // Create a list to hold the booked time slots
-        List<Custom> bookedSlots = new ArrayList<>();
+        List<CustomDto> bookedSlots = new ArrayList<>();
 
         // Populate booked time slots from the program list
         for (TherapistProgram program : programList) {
@@ -76,47 +77,47 @@ public class TherapistProgramBOImpl {
             LocalTime endTime = program.getEndTime();
             String day = program.getDay(); // Assuming there's a method to get the day
 
-            bookedSlots.add(new Custom(startTime, endTime, day));
+            bookedSlots.add(new CustomDto(startTime, endTime, day));
         }
 
         // Check for each day of the week (assuming you want to check all days)
         for (String day : getAllDaysOfWeek()) {
             // Filter booked slots for the current day
-            List<Custom> bookedSlotsForDay = new ArrayList<>();
-            for (Custom booked : bookedSlots) {
+            List<CustomDto> bookedSlotsForDay = new ArrayList<>();
+            for (CustomDto booked : bookedSlots) {
                 if (booked.getDay().equals(day)) {
                     bookedSlotsForDay.add(booked);
                 }
             }
 
             // Find available slots for the day
-            List<Custom> availableSlots = findAvailableSlots(startOfDay, endOfDay, bookedSlotsForDay);
+            List<CustomDto> availableSlots = findAvailableSlots(startOfDay, endOfDay, bookedSlotsForDay);
 
             // If no available slots, add the full day as an available slot
             if (availableSlots.isEmpty()) {
-                availableSlots.add(new Custom(startOfDay, endOfDay, day));
+                availableSlots.add(new CustomDto(startOfDay, endOfDay, day));
             }
 
             // Add available slots to results
-            for (Custom slot : availableSlots) {
-                results.add(new Custom(day, slot.toString()));
+            for (CustomDto slot : availableSlots) {
+                results.add(new CustomDto(day, slot.toString()));
             }
         }
 
         return results;
     }
 
-    private List<Custom> findAvailableSlots(LocalTime startOfDay, LocalTime endOfDay, List<Custom> bookedSlots) {
-        List<Custom> availableSlots = new ArrayList<>();
+    public List<CustomDto> findAvailableSlots(LocalTime startOfDay, LocalTime endOfDay, List<CustomDto> bookedSlots) {
+        List<CustomDto> availableSlots = new ArrayList<>();
         LocalTime currentStart = startOfDay;
 
         // Sort booked slots by start time
         bookedSlots.sort((a, b) -> a.getStart().compareTo(b.getStart()));
 
-        for (Custom booked : bookedSlots) {
+        for (CustomDto booked : bookedSlots) {
             // If there's a gap between the current start and the booked start, add it as an available slot
             if (currentStart.isBefore(booked.getStart())) {
-                availableSlots.add(new Custom(currentStart, booked.getStart()));
+                availableSlots.add(new CustomDto(currentStart, booked.getStart()));
             }
             // Move the current start to the end of the booked slot if it overlaps or is adjacent
             currentStart = booked.getEnd().isAfter(currentStart) ? booked.getEnd() : currentStart;
@@ -124,13 +125,13 @@ public class TherapistProgramBOImpl {
 
         // Check if there's time left after the last booked slot
         if (currentStart.isBefore(endOfDay)) {
-            availableSlots.add(new Custom(currentStart, endOfDay));
+            availableSlots.add(new CustomDto(currentStart, endOfDay));
         }
 
         return availableSlots;
     }
 
-    private List<String> getAllDaysOfWeek() {
+    public List<String> getAllDaysOfWeek() {
         return List.of("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
     }
 

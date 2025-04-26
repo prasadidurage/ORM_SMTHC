@@ -6,11 +6,18 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="userPane" prefHeight="754.0" prefWidth="1252.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.ormsmhtc.controller.UserManageController">
+<Pane fx:id="userPane" prefHeight="754.0" prefWidth="1252.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.ormsmhtc.controller.UserManageController">
    <children>
+      <ImageView fitHeight="754.0" fitWidth="1252.0" layoutX="-3.0" opacity="0.38" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assest/backgrounttt.jpg" />
+         </image>
+      </ImageView>
       <Group layoutX="108.0" layoutY="218.0" />
       <Group layoutX="108.0" layoutY="297.0" />
       <Group layoutX="108.0" layoutY="134.0">

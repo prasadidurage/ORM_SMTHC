@@ -2,6 +2,7 @@ package lk.ijse.ormsmhtc.dao.custom.impl;
 
 
 import lk.ijse.ormsmhtc.config.FactoryConfiguration;
+import lk.ijse.ormsmhtc.dao.custom.UserDAO;
 import lk.ijse.ormsmhtc.entity.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,7 +11,7 @@ import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAOImpl {
+public class UserDAOImpl implements UserDAO {
     private FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
     public String getPassword(String userName) {
         Session session = null;
@@ -110,5 +111,49 @@ public class UserDAOImpl {
                 session.close();
             }
         }
+    }
+
+    public User getAllByUserCredential(String userName, String password) {
+        Session session = factoryConfiguration.getSession();
+        Transaction transaction = null;
+        User users = null;
+
+        try {
+            transaction = session.beginTransaction();
+            Query<User> query = session.createQuery("FROM User u WHERE u.username = :username", User.class);
+            query.setParameter("username",userName);
+            users = query.uniqueResult(); // Retrieve list of patients
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return users;
+    }
+
+    public boolean update(User user) {
+        Session session = factoryConfiguration.getSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            session.merge(user);
+            transaction.commit();
+            return true;
+        }catch (Exception e){
+            transaction.rollback();
+            return false;
+        }finally {
+            if(session != null){
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public User getAllById(String paymentId) {
+        return null;
     }
 }

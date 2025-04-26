@@ -7,12 +7,19 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <Pane fx:id="userPane" prefHeight="754.0" prefWidth="1252.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.ormsmhtc.controller.PatientController">
    <children>
+      <ImageView fitHeight="754.0" fitWidth="1246.0" opacity="0.36" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assest/backgrounttt.jpg" />
+         </image>
+      </ImageView>
       <Group layoutX="107.0" layoutY="178.0">
          <children>
             <Label prefHeight="27.0" prefWidth="143.0" text="Name :">
@@ -61,24 +68,24 @@
          <children>
             <Group>
                <children>
-                  <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addPatient" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #C9DEF2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Add">
+                  <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addPatient" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #C9DEF2; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: black;" text="Add">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
                </children>
             </Group>
-            <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#updatePatient" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #C9DEF2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Update">
+            <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#updatePatient" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #C9DEF2; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px; -fx-border-color: black;" text="Update">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deletePatient" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #C9DEF2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Delete">
+            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deletePatient" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #C9DEF2; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-color: black; -fx-border-radius: 20px;" text="Delete">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btnReset" mnemonicParsing="false" onAction="#resetPage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #C9DEF2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Reset">
+            <Button fx:id="btnReset" mnemonicParsing="false" onAction="#resetPage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #C9DEF2; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-color: black; -fx-border-radius: 20px;" text="Reset">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

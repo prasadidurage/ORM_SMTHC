@@ -10,9 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import lk.ijse.ormsmhtc.bo.BOFactory;
 import lk.ijse.ormsmhtc.bo.custom.impl.TherapistBOImpl;
 import lk.ijse.ormsmhtc.dto.TherapistDto;
 import lk.ijse.ormsmhtc.dto.tm.TherapistTM;
+import lk.ijse.ormsmhtc.util.Validation;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -84,7 +86,7 @@ public class TherapistManageController implements Initializable {
     @FXML
     private TextField txtTherapyNumber;
 
-    private TherapistBOImpl therapistBO = new TherapistBOImpl();
+    private TherapistBOImpl therapistBO = (TherapistBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST);
 
     @FXML
     void addTherapist(ActionEvent event) {
@@ -93,13 +95,28 @@ public class TherapistManageController implements Initializable {
         String email = txtTherapistEmail.getText();
         String phone = txtTherapyNumber.getText();
         String specialization = txtSpecialization.getText();
-
-        boolean isSaved = therapistBO.saveTherapist(new TherapistDto(id, name, phone,email, specialization));
-        if (isSaved) {
-            new Alert(Alert.AlertType.INFORMATION,"Therapist saved successfully").show();
-            refreshPage();
-        }else{
-            new Alert(Alert.AlertType.WARNING,"Therapist saved not successfully").show();
+        boolean isCorrectEmail = Validation.isValid(email,"gmail");
+        boolean isCorrectPhone = Validation.isValid(phone,"phone");
+        if (!isCorrectEmail){
+            txtTherapistEmail.setStyle("-fx-border-color: red");
+        }else {
+            txtTherapistEmail.setStyle("-fx-border-color: black");
+        }
+        if (!isCorrectPhone){
+            txtTherapyNumber.setStyle("-fx-border-color: red");
+        }else {
+            txtTherapyNumber.setStyle("-fx-border-color: black");
+        }
+        if (isCorrectPhone && isCorrectEmail && !id.isEmpty() && !name.isEmpty() && !specialization.isEmpty()) {
+            boolean isSaved = therapistBO.saveTherapist(new TherapistDto(id, name, phone, email, specialization));
+            if (isSaved) {
+                new Alert(Alert.AlertType.INFORMATION, "Therapist saved successfully").show();
+                refreshPage();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Therapist saved not successfully").show();
+            }
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Wrong or null input").show();
         }
     }
 
@@ -148,13 +165,29 @@ public class TherapistManageController implements Initializable {
         String email = txtTherapistEmail.getText();
         String phone = txtTherapyNumber.getText();
         String specialization = txtSpecialization.getText();
+        boolean isCorrectEmail = Validation.isValid(email,"gmail");
+        boolean isCorrectPhone = Validation.isValid(phone,"phone");
+        if (!isCorrectEmail){
+            txtTherapistEmail.setStyle("-fx-border-color: red");
+        }else {
+            txtTherapistEmail.setStyle("-fx-border-color: black");
+        }
+        if (!isCorrectPhone){
+            txtTherapyNumber.setStyle("-fx-border-color: red");
+        }else {
+            txtTherapyNumber.setStyle("-fx-border-color: black");
+        }
+        if (isCorrectPhone && isCorrectEmail && !id.isEmpty() && !name.isEmpty() && !specialization.isEmpty()) {
 
-        boolean isUpdate = therapistBO.updateTherapist(new TherapistDto(id, name, phone,email,specialization));
-        if (isUpdate) {
-            new Alert(Alert.AlertType.INFORMATION,"Therapist update successfully").show();
-            refreshPage();
-        }else{
-            new Alert(Alert.AlertType.WARNING,"Therapist update not successfully").show();
+            boolean isUpdate = therapistBO.updateTherapist(new TherapistDto(id, name, phone, email, specialization));
+            if (isUpdate) {
+                new Alert(Alert.AlertType.INFORMATION, "Therapist update successfully").show();
+                refreshPage();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Therapist update not successfully").show();
+            }
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Wrong or null input").show();
         }
     }
 

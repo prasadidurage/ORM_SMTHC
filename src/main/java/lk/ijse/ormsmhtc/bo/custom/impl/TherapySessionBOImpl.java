@@ -1,13 +1,14 @@
 package lk.ijse.ormsmhtc.bo.custom.impl;
 
 
-
+import lk.ijse.ormsmhtc.bo.custom.TherapySessionBO;
+import lk.ijse.ormsmhtc.dao.DAOFactory;
 import lk.ijse.ormsmhtc.dao.custom.impl.TherapistProgramDAOImpl;
 import lk.ijse.ormsmhtc.dao.custom.impl.TherapySessionDAOImpl;
-import lk.ijse.ormsmhtc.dto.Custom;
+import lk.ijse.ormsmhtc.dto.CustomDto;
 import lk.ijse.ormsmhtc.dto.TherapySessionDTO;
-import lk.ijse.ormsmhtc.entity.TherapistProgram;
-import lk.ijse.ormsmhtc.entity.TherapySession;
+import lk.ijse.ormsmhtc.entity.*;
+
 
 import java.sql.Date;
 import java.sql.Time;
@@ -16,9 +17,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TherapySessionBOImpl {
-    TherapySessionDAOImpl therapySessionDAO = new TherapySessionDAOImpl();
-    TherapistProgramDAOImpl therapistProgramDAO = new TherapistProgramDAOImpl();
+public class TherapySessionBOImpl implements TherapySessionBO {
+    TherapySessionDAOImpl therapySessionDAO = (TherapySessionDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPY_SESSION);
+    TherapistProgramDAOImpl therapistProgramDAO = (TherapistProgramDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPIST_PROGRAM);
 
     public ArrayList<TherapySessionDTO> getAll() {
         ArrayList<TherapySession> therapySessions = therapySessionDAO.getAll();
@@ -49,12 +50,12 @@ public class TherapySessionBOImpl {
         return "TS001";
     }
 
-    public ArrayList<Custom> getAvailableTime(String programId, String therapistId) {
+    public ArrayList<CustomDto> getAvailableTime(String programId, String therapistId) {
         ArrayList<TherapistProgram> therapistPrograms = (ArrayList<TherapistProgram>) therapistProgramDAO.getAllByIDS(programId, therapistId);
         ArrayList<TherapySession> therapySessions = (ArrayList<TherapySession>) therapySessionDAO.getAllByTherapistId(therapistId);
-        ArrayList<Custom> freeTimeSlots = new ArrayList<>();
+        ArrayList<CustomDto> freeTimeSlots = new ArrayList<>();
 
-        ArrayList<Custom> availableTime = new ArrayList<>();
+        ArrayList<CustomDto> availableTime = new ArrayList<>();
         for (TherapistProgram therapistProgram : therapistPrograms) {
             Time start = Time.valueOf(therapistProgram.getStartTime());
             Time end = Time.valueOf(therapistProgram.getEndTime());
@@ -64,10 +65,10 @@ public class TherapySessionBOImpl {
             String timeSlot = formattedStartTime + " - " + formattedEndTime;
 
             String day = therapistProgram.getDay();
-            availableTime.add(new Custom(day,timeSlot));
+            availableTime.add(new CustomDto(day,timeSlot));
         }
 
-        ArrayList<Custom> sessionTimes = new ArrayList<>();
+        ArrayList<CustomDto> sessionTimes = new ArrayList<>();
         for (TherapySession therapySession : therapySessions) {
             Time start = therapySession.getStartTime();
             Time end = therapySession.getEndTime();
@@ -77,18 +78,18 @@ public class TherapySessionBOImpl {
             String timeSlot = formattedStartTime + " - " + formattedEndTime;
 
             Date date = new Date(therapySession.getDate().getTime());
-            sessionTimes.add(new Custom(timeSlot, date));
+            sessionTimes.add(new CustomDto(timeSlot, date));
         }
 
-        ArrayList<Custom> timeAndDate = new ArrayList<>();
-        for (Custom custom : availableTime) {
-            String day = custom.getDay();
-            String timeSlot = custom.getAvailableTimeList();
+        ArrayList<CustomDto> timeAndDate = new ArrayList<>();
+        for (CustomDto customDto : availableTime) {
+            String day = customDto.getDay();
+            String timeSlot = customDto.getAvailableTimeList();
             timeAndDate = getAllDatesForDayOfMonth(day, timeSlot, timeAndDate);
         }
-        for (Custom custom : timeAndDate) {
-            String startTime = custom.getTime().split(" - ")[0].trim() + ":00";
-            String endTime = custom.getTime().split(" - ")[1].trim() + ":00";
+        for (CustomDto customDto : timeAndDate) {
+            String startTime = customDto.getTime().split(" - ")[0].trim() + ":00";
+            String endTime = customDto.getTime().split(" - ")[1].trim() + ":00";
 
             Time fullStartTime = Time.valueOf(startTime); // e.g., "10:00:00"
             Time fullEndTime = Time.valueOf(endTime);
@@ -98,7 +99,7 @@ public class TherapySessionBOImpl {
 
             for (TherapySession therapySession : therapySessions) {
                 Date sessionDate = new Date(therapySession.getDate().getTime());
-                if (custom.getDate().equals(sessionDate)) {
+                if (customDto.getDate().equals(sessionDate)) {
                     Time sessionStart = therapySession.getStartTime();
                     Time sessionEnd = therapySession.getEndTime();
                     freeSlots = adjustFreeSlots(freeSlots, sessionStart, sessionEnd);
@@ -107,26 +108,26 @@ public class TherapySessionBOImpl {
 
             for (Time[] slot : freeSlots) {
                 String freeTimeSlot = formatTime(slot[0]) + " - " + formatTime(slot[1]);
-                freeTimeSlots.add(new Custom(custom.getDate(), freeTimeSlot));
+                freeTimeSlots.add(new CustomDto(customDto.getDate(), freeTimeSlot));
             }
         }
         return freeTimeSlots;
     }
 
-    private ArrayList<Custom> getAllDatesForDayOfMonth(String day, String timeSlot, ArrayList<Custom> timeAndDate) {
+    public ArrayList<CustomDto> getAllDatesForDayOfMonth(String day, String timeSlot, ArrayList<CustomDto> timeAndDate) {
         LocalDate today = LocalDate.now();
         LocalDate firstDayOfMonth = today.withDayOfMonth(1);
         LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
 
         for (LocalDate date = firstDayOfMonth; !date.isAfter(lastDayOfMonth); date = date.plusDays(1)) {
             if (date.getDayOfWeek().name().equalsIgnoreCase(day.toUpperCase())) {
-                timeAndDate.add(new Custom(Date.valueOf(date), timeSlot));
+                timeAndDate.add(new CustomDto(Date.valueOf(date), timeSlot));
             }
         }
         return timeAndDate;
     }
 
-    private static List<Time[]> adjustFreeSlots(List<Time[]> freeSlots, Time sessionStart, Time sessionEnd) {
+    public List<Time[]> adjustFreeSlots(List<Time[]> freeSlots, Time sessionStart, Time sessionEnd) {
         List<Time[]> adjustedSlots = new ArrayList<>();
 
         for (Time[] slot : freeSlots) {
@@ -148,7 +149,7 @@ public class TherapySessionBOImpl {
         return adjustedSlots;
     }
 
-    private static String formatTime(Time time) {
+    public String formatTime(Time time) {
         // Convert Time to String in "hh:mm a" format
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
         return sdf.format(time);
@@ -188,6 +189,33 @@ public class TherapySessionBOImpl {
         }
         return patientIds;
     }
+
+    public ArrayList<CustomDto> getTherapyPerformance(String therapistId){
+        ArrayList<Custom> customs = therapySessionDAO.getTherapyPerformance(therapistId);
+        ArrayList<CustomDto> customDtos = new ArrayList<>();
+        for (Custom custom: customs){
+            CustomDto customDto = new CustomDto(
+                    custom.getDate(),
+                    custom.getCount()
+            );
+            customDtos.add(customDto);
+        }
+        return customDtos;
+    }
+
+    public ArrayList<CustomDto> getSessionStatistic(String programId){
+        ArrayList<Custom> customs = therapySessionDAO.getSessionStatistic(programId);
+        ArrayList<CustomDto> customDtos = new ArrayList<>();
+        for (Custom custom: customs){
+            CustomDto customDto = new CustomDto(
+                    custom.getDate(),
+                    custom.getCount()
+            );
+            customDtos.add(customDto);
+        }
+        return customDtos;
+    }
+
 }
 
 

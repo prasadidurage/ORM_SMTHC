@@ -11,7 +11,7 @@ public class AppInitializer extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(AppInitializer.class.getResource("/view/login-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AppInitializer.class.getResource("/view/AdminHomePage.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("SMHTC");
         stage.setScene(scene);

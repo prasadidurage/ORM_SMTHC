@@ -2,15 +2,17 @@ package lk.ijse.ormsmhtc.bo.custom.impl;
 
 
 
+import lk.ijse.ormsmhtc.bo.custom.TherapyProgramBO;
+import lk.ijse.ormsmhtc.dao.DAOFactory;
 import lk.ijse.ormsmhtc.dao.custom.impl.TherapyProgramDAOImpl;
 import lk.ijse.ormsmhtc.dto.TherapyProgramDto;
-import lk.ijse.ormsmhtc.entity.TherapyProgram;
+import lk.ijse.ormsmhtc.entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TherapyProgramBOImpl {
-    private TherapyProgramDAOImpl therapyProgramDAO = new TherapyProgramDAOImpl();
+public class TherapyProgramBOImpl implements TherapyProgramBO {
+    private TherapyProgramDAOImpl therapyProgramDAO = (TherapyProgramDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPY_PROGRAM);
     public String getNextId() {
         String lastId = therapyProgramDAO.getLastId();
         if (lastId != null) {

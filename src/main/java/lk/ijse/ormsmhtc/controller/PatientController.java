@@ -1,6 +1,5 @@
 package lk.ijse.ormsmhtc.controller;
 
-import lk.ijse.ormsmhtc.bo.custom.impl.PatientBOImpl;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,8 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import lk.ijse.ormsmhtc.bo.BOFactory;
+import lk.ijse.ormsmhtc.bo.custom.impl.PatientBOImpl;
 import lk.ijse.ormsmhtc.dto.PatientDto;
 import lk.ijse.ormsmhtc.dto.tm.PatientTM;
+import lk.ijse.ormsmhtc.util.Validation;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -93,7 +95,7 @@ public class PatientController implements Initializable {
     @FXML
     private Pane userPane;
 
-    private PatientBOImpl patientBO = new PatientBOImpl();
+    private PatientBOImpl patientBO = (PatientBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
 
     @FXML
     void addPatient(ActionEvent event) {
@@ -101,23 +103,41 @@ public class PatientController implements Initializable {
         String patientName = txtPatientName.getText();
         String phone = txtPhone.getText();
         String address = txtAddress.getText();
-        String email = txtEmail.getText();
+        String email = txtEmail.getText().trim();
+        System.out.println(email.isEmpty() +"|"+email);
         String history = txtHistory.getText();
 
-        boolean isSaved = patientBO.savePatient(new PatientDto(patientId,patientName,address,phone,email,history));
-        if(isSaved){
-            new Alert(Alert.AlertType.INFORMATION,"Patient saved successfully").show();
-            txtPatientId.setText("");
-            txtPatientName.setText("");
-            txtAddress.setText("");
-            txtPhone.setText("");
-            txtEmail.setText("");
-            txtHistory.setText("");
-            refreshPage();
-        }else{
-            new Alert(Alert.AlertType.WARNING,"Patient saved not successfully").show();
+        boolean isCorrectEmail = Validation.isValid(email,"gmail");
+        boolean isCorrectPhone = Validation.isValid(phone,"phone");
+        if (!isCorrectEmail){
+            txtEmail.setStyle("-fx-border-color: red");
+        }else {
+            txtEmail.setStyle("-fx-border-color: black");
         }
 
+        if (!isCorrectPhone){
+            txtPhone.setStyle("-fx-border-color: red");
+        }else {
+            txtPhone.setStyle("-fx-border-color: black");
+        }
+
+        if (isCorrectEmail && isCorrectPhone && !patientId.isEmpty() && !patientName.isEmpty() && !address.isEmpty() && !history.isEmpty()) {
+            boolean isSaved = patientBO.savePatient(new PatientDto(patientId, patientName, address, phone, email, history));
+            if (isSaved) {
+                new Alert(Alert.AlertType.INFORMATION, "Patient saved successfully").show();
+                txtPatientId.setText("");
+                txtPatientName.setText("");
+                txtAddress.setText("");
+                txtPhone.setText("");
+                txtEmail.setText("");
+                txtHistory.setText("");
+                refreshPage();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Patient saved not successfully").show();
+            }
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Invalid input or Null input").show();
+        }
     }
 
     @FXML
@@ -168,13 +188,31 @@ public class PatientController implements Initializable {
         String address = txtAddress.getText();
         String email = txtEmail.getText();
         String history = txtHistory.getText();
+        System.out.println(email);
+        boolean isCorrectEmail = Validation.isValid(email,"gmail");
+        boolean isCorrectPhone = Validation.isValid(phone,"phone");
+        if (!isCorrectEmail){
+            txtEmail.setStyle("-fx-border-color: red");
+        }else {
+            txtEmail.setStyle("-fx-border-color: black");
+        }
 
-        boolean isUpdate = patientBO.updatePatient(new PatientDto(patientId, patientName, address, phone, email, history));
-        if(isUpdate){
-            new Alert(Alert.AlertType.INFORMATION,"Patient saved successfully").show();
-            refreshPage();
-        }else{
-            new Alert(Alert.AlertType.WARNING,"Patient saved not successfully").show();
+        if (!isCorrectPhone){
+            txtPhone.setStyle("-fx-border-color: red");
+        }else {
+            txtPhone.setStyle("-fx-border-color: black");
+        }
+
+        if (isCorrectEmail && isCorrectPhone && patientId != null && patientName != null && address != null && history != null) {
+            boolean isUpdate = patientBO.updatePatient(new PatientDto(patientId, patientName, address, phone, email, history));
+            if (isUpdate) {
+                new Alert(Alert.AlertType.INFORMATION, "Patient update successfully").show();
+                refreshPage();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Patient update not successfully").show();
+            }
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Invalid input or Null input").show();
         }
     }
 

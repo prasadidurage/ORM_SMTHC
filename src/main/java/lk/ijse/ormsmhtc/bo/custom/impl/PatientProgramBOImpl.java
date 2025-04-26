@@ -2,17 +2,19 @@ package lk.ijse.ormsmhtc.bo.custom.impl;
 
 
 
+import lk.ijse.ormsmhtc.bo.BOFactory;
+import lk.ijse.ormsmhtc.bo.custom.PatientProgramBO;
+import lk.ijse.ormsmhtc.dao.DAOFactory;
 import lk.ijse.ormsmhtc.dao.custom.impl.PatientProgramDAOImpl;
 import lk.ijse.ormsmhtc.dto.PatientProgramDto;
 import lk.ijse.ormsmhtc.dto.PaymentDto;
-import lk.ijse.ormsmhtc.entity.PatientProgram;
-import lk.ijse.ormsmhtc.entity.PatientProgramId;
+import lk.ijse.ormsmhtc.entity.*;
 
 import java.util.ArrayList;
 
-public class PatientProgramBOImpl {
-    PatientProgramDAOImpl patientProgramDAO = new PatientProgramDAOImpl();
-    PaymentBOImpl paymentBO = new PaymentBOImpl();
+public class PatientProgramBOImpl implements PatientProgramBO {
+    PatientProgramDAOImpl patientProgramDAO = (PatientProgramDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.PATIENT_PROGRAM);
+    PaymentBOImpl paymentBO = (PaymentBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
     public ArrayList<PatientProgramDto> getAllPatientProgram() {
         ArrayList<PatientProgram> patientPrograms = patientProgramDAO.getAll();
         ArrayList<PatientProgramDto> patientProgramDtos = new ArrayList<>();

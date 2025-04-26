@@ -4,14 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
-public class homepageController {
+public class ReceptionHomePageController {
     @FXML
     private Pane bodyPane;
 
@@ -31,30 +30,26 @@ public class homepageController {
     private Button btnReports;
 
     @FXML
-    private Button btnTherapyProgran;
-
-    @FXML
     private Button btnTherapySession;
 
     @FXML
-    private Button btnTherpist;
-
-    @FXML
-    private Button btnUserManage;
-
-
-    @FXML
-    private Label lblAppoiment;
-
-    @FXML
-    private Label lblPation;
-
-    @FXML
-    private Label lblTheraphy;
+    void navigateRegisterPage(ActionEvent event) {
+        navigateTo("/view/RegisterToProgram.fxml");
+    }
 
     @FXML
     void navigateToAssignProgram(ActionEvent event) {
         navigateTo("/view/AssignToPrograms.fxml");
+    }
+
+    @FXML
+    void navigateToHomePage(MouseEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ReceptionHomePage.fxml"));
+        Pane newContent = loader.load();
+
+        AnchorPane parent = (AnchorPane) bodyPane.getParent();
+        parent.getChildren().remove(bodyPane);
+        parent.getChildren().add(newContent);
     }
 
     @FXML
@@ -68,45 +63,19 @@ public class homepageController {
     }
 
     @FXML
-    void navigateToHomePage(MouseEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AdminHomePage.fxml"));
-        Pane newContent = loader.load();
-
-        AnchorPane parent = (AnchorPane) bodyPane.getParent();
-        parent.getChildren().remove(bodyPane);
-        parent.getChildren().add(newContent);
+    void navigateToReports(ActionEvent event) {
+        navigateTo("/view/Reports.fxml");
     }
 
     @FXML
-    void navigateToTherapist(ActionEvent event)  {
-        navigateTo("/view/TherapistManage.fxml");
-    }
-
-    @FXML
-    void navigateToTherapyProgram(ActionEvent event) {
-        navigateTo("/view/TherapyProgram.fxml");
+    void navigateToSettingPage(MouseEvent event) {
+        navigateTo("/view/SettingFile.fxml");
     }
 
     @FXML
     void navigateToTherapySession(ActionEvent event) {
         navigateTo("/view/TherapySessionManagement.fxml");
     }
-
-    @FXML
-    void navigateToUserManagePage(ActionEvent event) {
-        navigateTo("/view/UserManagement.fxml");
-    }
-
-    @FXML
-    void navigateToReports(ActionEvent event) {
-
-    }
-
-    @FXML
-    void navigateRegisterPage(ActionEvent event) {
-        navigateTo("/view/RegisterToProgram.fxml");
-    }
-
 
     public void navigateTo(String path) {
         try {
@@ -119,4 +88,5 @@ public class homepageController {
             e.printStackTrace();
         }
     }
+
 }

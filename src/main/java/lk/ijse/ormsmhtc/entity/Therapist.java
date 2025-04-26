@@ -32,7 +32,7 @@ public class Therapist {
 //    @OneToMany(mappedBy = "therapist", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<TherapyProgram> therapyPrograms;
 
-    @OneToMany(mappedBy = "therapist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "therapist", cascade = CascadeType.ALL)
     private List<TherapySession> therapySessions;
 
 //    @OneToMany

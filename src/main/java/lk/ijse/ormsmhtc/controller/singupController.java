@@ -2,14 +2,24 @@ package lk.ijse.ormsmhtc.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import lk.ijse.ormsmhtc.bo.BOFactory;
+import lk.ijse.ormsmhtc.bo.custom.impl.UserBOImpl;
 
-public class singupController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class singupController implements Initializable {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 
     @FXML
     private Button btnSingUp;
@@ -53,6 +63,9 @@ public class singupController {
     @FXML
     private TextField txtUserName;
 
+    UserBOImpl userBO = (UserBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.USER);
+
+
     @FXML
     void selectjobRole(ActionEvent event) {
 
@@ -65,6 +78,7 @@ public class singupController {
 
     @FXML
     void singUpOnclick(ActionEvent event) {
+
 
     }
 

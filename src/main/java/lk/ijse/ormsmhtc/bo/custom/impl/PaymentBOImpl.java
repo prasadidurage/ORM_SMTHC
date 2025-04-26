@@ -2,6 +2,8 @@ package lk.ijse.ormsmhtc.bo.custom.impl;
 
 
 
+import lk.ijse.ormsmhtc.bo.custom.PaymentBO;
+import lk.ijse.ormsmhtc.dao.DAOFactory;
 import lk.ijse.ormsmhtc.dao.custom.impl.PatientDAOImpl;
 import lk.ijse.ormsmhtc.dao.custom.impl.PaymentDAOImpl;
 import lk.ijse.ormsmhtc.dao.custom.impl.TherapyProgramDAOImpl;
@@ -11,11 +13,11 @@ import lk.ijse.ormsmhtc.entity.*;
 
 import java.util.ArrayList;
 
-public class PaymentBOImpl {
-    PaymentDAOImpl paymentDAO = new PaymentDAOImpl();
-    PatientDAOImpl patientDAO = new PatientDAOImpl();
-    TherapyProgramDAOImpl therapyProgramDAO = new TherapyProgramDAOImpl();
-    TherapySessionDAOImpl therapySessionDAO = new TherapySessionDAOImpl();
+public class PaymentBOImpl implements PaymentBO {
+    PaymentDAOImpl paymentDAO = (PaymentDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.PAYMENT);
+    PatientDAOImpl patientDAO = (PatientDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.PATIENT);
+    TherapyProgramDAOImpl therapyProgramDAO = (TherapyProgramDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPY_PROGRAM);
+    TherapySessionDAOImpl therapySessionDAO = (TherapySessionDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPY_SESSION);
     public String getNextId() {
         String lastId = paymentDAO.getLastId();
         if (lastId != null) {
@@ -103,5 +105,32 @@ public class PaymentBOImpl {
 
     public boolean deleteSession(String paymentId) {
         return paymentDAO.delete(paymentId);
+    }
+
+    public double getBalance(String programID, String patientID) {
+        Payment payment = paymentDAO.getBalance(programID,patientID);
+        return payment.getBalance();
+    }
+
+    public ArrayList<PaymentDto> fondByPaymentId(String paymentId) {
+        ArrayList<Payment> data = paymentDAO.findByPaymentId(paymentId);
+        ArrayList<PaymentDto> Data = new ArrayList<>();
+        for (Payment payment: data){
+            PaymentDto paymentDto = new PaymentDto(
+                    payment.getId(),
+                    payment.getAmount(),
+                    payment.getInstallment(),
+                    payment.getStatus(),
+                    payment.getBalance(),
+                    payment.getDate(),
+                    payment.getPatient().getId(),
+                    payment.getProgram().getId(),
+                    (payment.getTherapySession() != null && payment.getTherapySession().getId() != null)
+                            ? payment.getTherapySession().getId()
+                            : "No"
+            );
+            Data.add(paymentDto);
+        }
+        return Data;
     }
 }

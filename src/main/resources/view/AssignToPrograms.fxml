@@ -7,31 +7,21 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="programPane" prefHeight="990.0" prefWidth="1783.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.serenity_mental_center.controllers.AssignToProgramsController">
+<Pane fx:id="programPane" prefHeight="754.0" prefWidth="1252.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.ormsmhtc.controller.AssignToProgramsController">
    <children>
-      <Group layoutX="122.0" layoutY="516.0">
-         <children>
-            <Label prefHeight="27.0" prefWidth="143.0" text="Start Time :">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtStartTime" layoutX="144.0" prefHeight="27.0" prefWidth="173.0" style="-fx-border-color: black; -fx-background-color: white;" />
-         </children>
-      </Group>
-      <Group layoutX="123.0" layoutY="468.0">
-         <children>
-            <Label prefHeight="27.0" prefWidth="143.0" text="Day">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Label>
-         </children>
-      </Group>
+      <ImageView fitHeight="754.0" fitWidth="1252.0" opacity="0.35" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assest/backgrounttt.jpg" />
+         </image>
+      </ImageView>
+      <Group layoutX="122.0" layoutY="516.0" />
+      <Group layoutX="108.0" layoutY="406.0" />
       <Group layoutX="108.0" layoutY="134.0">
          <children>
             <Label prefHeight="27.0" prefWidth="143.0" text="Program :">
@@ -50,7 +40,7 @@
             </Label>
          </children>
       </Group>
-      <TableView fx:id="tablePrograms" layoutX="121.0" layoutY="644.0" onMouseClicked="#setDataToTextFields" prefHeight="300.0" prefWidth="1071.0">
+      <TableView fx:id="tablePrograms" layoutX="43.0" layoutY="537.0" onMouseClicked="#setDataToTextFields" prefHeight="176.0" prefWidth="1071.0">
          <columns>
             <TableColumn fx:id="colProgramId" prefWidth="75.0" text="Program Id" />
             <TableColumn fx:id="colTherapist" prefWidth="75.0" text="Therapist" />
@@ -82,42 +72,47 @@
             <TableColumn fx:id="colTimes" prefWidth="821.6001281738281" text="Times" />
          </columns>
       </TableView>
-      <ComboBox fx:id="cmbDays" layoutX="266.0" layoutY="468.0" onAction="#getDays" prefHeight="27.0" prefWidth="173.0" style="-fx-background-color: white; -fx-border-color: black;" />
+      <ComboBox fx:id="cmbDays" layoutX="253.0" layoutY="406.0" onAction="#getDays" prefHeight="27.0" prefWidth="173.0" style="-fx-background-color: white; -fx-border-color: black;" />
       <Label fx:id="lblProgramId" layoutX="253.0" layoutY="169.0" prefHeight="17.0" prefWidth="275.0" />
       <Label fx:id="lblTherpistId" layoutX="702.0" layoutY="169.0" prefHeight="17.0" prefWidth="275.0" />
-      <Group layoutX="123.0" layoutY="569.0">
-         <children>
-            <Label prefHeight="27.0" prefWidth="143.0" text="End Time :">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtEndTime" layoutX="144.0" prefHeight="27.0" prefWidth="172.0" style="-fx-border-color: black; -fx-background-color: white;" />
-         </children>
-      </Group>
-      <VBox layoutX="1328.0" layoutY="665.0" spacing="50.0">
-         <children>
-            <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#save" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #b9def2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Add">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#update" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #b9def2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Update">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="btnRemove" mnemonicParsing="false" onAction="#delete" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #b9def2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Remove">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="btnReset" mnemonicParsing="false" onAction="#resetPage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #b9def2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Reset">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-         </children>
-      </VBox>
+      <Group layoutX="123.0" layoutY="569.0" />
+      <VBox layoutX="1328.0" layoutY="665.0" spacing="50.0" />
+      <Label layoutX="101.0" layoutY="444.0" prefHeight="27.0" prefWidth="143.0" text="Start Time :">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtStartTime" layoutX="253.0" layoutY="444.0" prefHeight="27.0" prefWidth="173.0" style="-fx-border-color: black; -fx-background-color: white;" />
+      <Label layoutX="101.0" layoutY="487.0" prefHeight="27.0" prefWidth="143.0" text="End Time :">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtEndTime" layoutX="253.0" layoutY="487.0" prefHeight="27.0" prefWidth="172.0" style="-fx-border-color: black; -fx-background-color: white;" />
+      <Label layoutX="101.0" layoutY="406.0" prefHeight="27.0" prefWidth="143.0" text="Day">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnAdd" layoutX="473.0" layoutY="460.0" mnemonicParsing="false" onAction="#save" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #b9def2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Add">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnUpdate" layoutX="659.0" layoutY="460.0" mnemonicParsing="false" onAction="#update" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #b9def2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Update">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnRemove" layoutX="839.0" layoutY="458.0" mnemonicParsing="false" onAction="#delete" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #b9def2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Remove">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnReset" layoutX="1027.0" layoutY="460.0" mnemonicParsing="false" onAction="#resetPage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: #b9def2; -fx-text-fill: black; -fx-background-radius: 20px;" text="Reset">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
    </children>
 </Pane>

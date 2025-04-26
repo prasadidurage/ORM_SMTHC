@@ -1,7 +1,10 @@
 package lk.ijse.ormsmhtc.dao.custom.impl;
 
+
 import lk.ijse.ormsmhtc.config.FactoryConfiguration;
+import lk.ijse.ormsmhtc.dao.custom.PaymentDAO;
 import lk.ijse.ormsmhtc.entity.*;
+import lk.ijse.ormsmhtc.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -9,7 +12,7 @@ import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentDAOImpl {
+public class PaymentDAOImpl implements PaymentDAO {
     FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
     public String getLastId() {
         Session session = factoryConfiguration.getSession();
@@ -36,16 +39,20 @@ public class PaymentDAOImpl {
         }
     }
 
+    @Override
+    public boolean update(Payment dto) {
+        return false;
+    }
+
     public boolean update(Payment payment, String therapySessionId, String patientId, String programId) {
         Session session = factoryConfiguration.getSession();
-        Transaction transaction = session.beginTransaction();
-        TherapySession therapySession = session.get(TherapySession.class,therapySessionId);
-        Patient patient = session.get(Patient.class,patientId);
-        TherapyProgram therapyProgram = session.get(TherapyProgram.class,programId);
-        payment.setPatient(patient);
-        payment.setTherapySession(therapySession);
-        payment.setProgram(therapyProgram);
+        Transaction transaction = null;
+
         try {
+            transaction = session.beginTransaction();
+            Patient patient = session.get(Patient.class, patientId);
+            TherapyProgram therapyProgram = session.get(TherapyProgram.class, programId);
+
             if (patient == null) {
                 System.err.println("Patient not found for ID: " + patientId);
                 transaction.rollback();
@@ -58,16 +65,32 @@ public class PaymentDAOImpl {
                 return false;
             }
 
-            session.merge(payment);
+            if (payment.getId() == null) {
+                System.err.println("Payment ID is null, cannot update.");
+                transaction.rollback();
+                return false;
+            }
+
+            TherapySession therapySession = null;
+            if (therapySessionId != null) {
+                therapySession = session.get(TherapySession.class, therapySessionId);
+                payment.setTherapySession(therapySession);
+            } else {
+                payment.setTherapySession(null);
+            }
+
+            payment.setPatient(patient);
+            payment.setProgram(therapyProgram);
+
+            session.merge(payment); // Safe now
             transaction.commit();
             return true;
-        }catch (Exception e){
-            transaction.rollback();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
             return false;
-        }finally {
-            if(session != null){
-                session.close();
-            }
+        } finally {
+            if (session != null) session.close();
         }
     }
 
@@ -132,6 +155,44 @@ public class PaymentDAOImpl {
         } finally {
             session.close();
         }
+        return (ArrayList<Payment>) payments;
+    }
+
+    public Payment getBalance(String programID, String patientID) {
+        Session session = factoryConfiguration.getSession();
+        Transaction transaction = null;
+        Payment payment = null;
+
+        try {
+            transaction = session.beginTransaction();
+            Query<Payment> query = session.createQuery(
+                    "FROM Payment p WHERE p.patient.id = :patientId AND p.program.id = :programId " +
+                            "AND p.date = (SELECT MAX(p2.date) FROM Payment p2 WHERE p2.patient.id = :patientId AND p2.program.id = :programId) ORDER BY p.id DESC",
+                    Payment.class
+            );
+            query.setParameter("programId", programID);
+            query.setParameter("patientId", patientID);
+            query.setMaxResults(1);
+            payment = query.uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return payment;
+    }
+
+    public ArrayList<Payment> findByPaymentId(String paymentId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<Payment> payments = session.createQuery(
+                        "FROM Payment p WHERE p.id = :id", Payment.class)
+                .setParameter("id", paymentId)
+                .getResultList();
+        session.close();
         return (ArrayList<Payment>) payments;
     }
 }

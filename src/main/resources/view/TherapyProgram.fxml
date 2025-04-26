@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="programPane" prefHeight="754.0" prefWidth="1252.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.serenity_mental_center.controllers.TherapyProgramController">
+<Pane fx:id="programPane" prefHeight="754.0" prefWidth="1252.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.ormsmhtc.controller.TherapyProgramController">
    <children>
       <ImageView fitHeight="754.0" fitWidth="1244.0" opacity="0.23" pickOnBounds="true" preserveRatio="true">
          <image>

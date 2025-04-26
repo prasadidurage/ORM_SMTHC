@@ -10,9 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import lk.ijse.ormsmhtc.bo.BOFactory;
 import lk.ijse.ormsmhtc.bo.custom.impl.TherapyProgramBOImpl;
 import lk.ijse.ormsmhtc.dto.TherapyProgramDto;
 import lk.ijse.ormsmhtc.dto.tm.TherapyProgramTM;
+import lk.ijse.ormsmhtc.util.Validation;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -84,22 +86,32 @@ public class TherapyProgramController implements Initializable {
     @FXML
     private TextField txtProgramName;
 
-    private TherapyProgramBOImpl therapyProgramBO = new TherapyProgramBOImpl();
+    private TherapyProgramBOImpl therapyProgramBO = (TherapyProgramBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
 
     @FXML
     void addProgram(ActionEvent event) {
+        boolean isCorrectCost = Validation.isValid(txtCost.getText(),"price");
+        if (!isCorrectCost){
+            txtCost.setStyle("-fx-border-color: red");
+        }else {
+            txtCost.setStyle("-fx-border-color: black");
+        }
         String id = txtProgramId.getText();
         String name = txtProgramName.getText();
         String duration = txtDuration.getText();
         double cost = Double.parseDouble(txtCost.getText());
         String description = txtDescription.getText();
 
-        boolean isSaved = therapyProgramBO.saveTherapyProgram(new TherapyProgramDto(id,name,duration,cost,description));
-        if (isSaved){
-            new Alert(Alert.AlertType.INFORMATION,"Therapy Program Saved Successfully").show();
-            refreshPage();
+        if (isCorrectCost && !id.isEmpty() && !name.isEmpty() && !duration.isEmpty() && !description.isEmpty() ) {
+            boolean isSaved = therapyProgramBO.saveTherapyProgram(new TherapyProgramDto(id, name, duration, cost, description));
+            if (isSaved) {
+                new Alert(Alert.AlertType.INFORMATION, "Therapy Program Saved Successfully").show();
+                refreshPage();
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Therapy Program Not Saved!").show();
+            }
         }else {
-            new Alert(Alert.AlertType.INFORMATION,"Therapy Program Not Saved!").show();
+            new Alert(Alert.AlertType.ERROR,"Invalid or null input").show();
         }
 
     }
@@ -144,18 +156,34 @@ public class TherapyProgramController implements Initializable {
 
     @FXML
     void updateProgram(ActionEvent event) {
-        String id = txtProgramId.getText();
-        String name = txtProgramName.getText();
-        String duration = txtDuration.getText();
-        double cost = Double.parseDouble(txtCost.getText());
-        String description = txtDescription.getText();
+        try {
+            boolean isCorrectCost = Validation.isValid(txtCost.getText(),"price");
+            if (!isCorrectCost){
+                txtCost.setStyle("-fx-border-color: red");
+            }else {
+                txtCost.setStyle("-fx-border-color: black");
+            }
 
-        boolean isUpdate = therapyProgramBO.updateTherapyProgram(new TherapyProgramDto(id,name,duration,cost,description));
-        if (isUpdate){
-            new Alert(Alert.AlertType.INFORMATION,"Therapy Program Update Successfully").show();
-            refreshPage();
-        }else {
-            new Alert(Alert.AlertType.INFORMATION,"Therapy Program Not Updated!").show();
+            String id = txtProgramId.getText();
+            String name = txtProgramName.getText();
+            String duration = txtDuration.getText();
+            double cost = Double.parseDouble(txtCost.getText());
+            String description = txtDescription.getText();
+
+            if (isCorrectCost && !id.isEmpty() && !name.isEmpty() && !duration.isEmpty() && !description.isEmpty() ) {
+
+                boolean isUpdate = therapyProgramBO.updateTherapyProgram(new TherapyProgramDto(id, name, duration, cost, description));
+                if (isUpdate) {
+                    new Alert(Alert.AlertType.INFORMATION, "Therapy Program Update Successfully").show();
+                    refreshPage();
+                } else {
+                    new Alert(Alert.AlertType.INFORMATION, "Therapy Program Not Updated!").show();
+                }
+            }else {
+                    new Alert(Alert.AlertType.ERROR,"Invalid or null input").show();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,17 +1,20 @@
 package lk.ijse.ormsmhtc.bo.custom.impl;
 
-import lk.ijse.ormsmhtc.bo.custom.PatientBO;
 
 import lk.ijse.ormsmhtc.bo.custom.PatientBO;
-import lk.ijse.ormsmhtc.dto.PatientDto;
-import lk.ijse.ormsmhtc.entity.Patient;
+import lk.ijse.ormsmhtc.dao.DAOFactory;
 import lk.ijse.ormsmhtc.dao.custom.impl.PatientDAOImpl;
+import lk.ijse.ormsmhtc.dao.custom.impl.TherapySessionDAOImpl;
+import lk.ijse.ormsmhtc.dto.PatientDto;
+import lk.ijse.ormsmhtc.dto.TherapySessionDTO;
+import lk.ijse.ormsmhtc.entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatientBOImpl {
-    private PatientDAOImpl patientDAO = new PatientDAOImpl();
+public class PatientBOImpl implements PatientBO {
+    private PatientDAOImpl patientDAO = (PatientDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.PATIENT);
+    private TherapySessionDAOImpl therapySessionDAO = (TherapySessionDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPY_SESSION);
 
     public boolean savePatient(PatientDto patientDto) {
         Patient patient = new Patient(
@@ -76,5 +79,23 @@ public class PatientBOImpl {
             patientIds.add(patientDto.getId());
         }
         return patientIds;
+    }
+
+    public ArrayList<TherapySessionDTO> getAllById(String patientId) {
+        ArrayList<TherapySession> therapySession = therapySessionDAO.getAllByIdPatientId(patientId);
+        ArrayList<TherapySessionDTO> therapySessionDTOS = new ArrayList<>();
+        for (TherapySession therapySession1 : therapySession){
+            TherapySessionDTO therapySessionDTO = new TherapySessionDTO(
+                    therapySession1.getId(),
+                    therapySession1.getDate(),
+                    therapySession1.getStartTime(),
+                    therapySession1.getEndTime(),
+                    therapySession1.getTherapist().getId(),
+                    therapySession1.getPatient().getId(),
+                    therapySession1.getTherapyProgram().getId()
+            );
+            therapySessionDTOS.add(therapySessionDTO);
+        }
+        return therapySessionDTOS;
     }
 }

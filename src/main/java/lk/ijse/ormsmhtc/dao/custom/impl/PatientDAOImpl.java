@@ -1,13 +1,14 @@
 package lk.ijse.ormsmhtc.dao.custom.impl;
 
+
 import lk.ijse.ormsmhtc.config.FactoryConfiguration;
 import lk.ijse.ormsmhtc.dao.custom.PatientDAO;
-import lk.ijse.ormsmhtc.entity.*;
+import lk.ijse.ormsmhtc.entity.Patient;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class PatientDAOImpl implements PatientDAO {
@@ -30,7 +31,7 @@ public class PatientDAOImpl implements PatientDAO {
         }
     }
 
-    public List<Patient> getAll() {
+    public ArrayList<Patient> getAll() {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = null;
         List<Patient> patients = null;
@@ -48,7 +49,7 @@ public class PatientDAOImpl implements PatientDAO {
         } finally {
             session.close();
         }
-        return patients;
+        return (ArrayList<Patient>) patients;
     }
 
     public String getLastId() {

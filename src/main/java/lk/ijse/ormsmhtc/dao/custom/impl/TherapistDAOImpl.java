@@ -1,17 +1,20 @@
 package lk.ijse.ormsmhtc.dao.custom.impl;
 
+
 import lk.ijse.ormsmhtc.config.FactoryConfiguration;
+import lk.ijse.ormsmhtc.dao.custom.TherapistDAO;
 import lk.ijse.ormsmhtc.entity.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TherapistDAOImpl {
+public class TherapistDAOImpl implements TherapistDAO {
     private FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
 
-    public List<Therapist> getAllTherapist() {
+    public ArrayList<Therapist> getAll() {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = null;
         List<Therapist> therapists = null;
@@ -29,7 +32,7 @@ public class TherapistDAOImpl {
         } finally {
             session.close();
         }
-        return therapists;
+        return (ArrayList<Therapist>) therapists;
     }
 
     public boolean save(Therapist therapist) {
@@ -64,6 +67,11 @@ public class TherapistDAOImpl {
                 session.close();
             }
         }
+    }
+
+    @Override
+    public Therapist getAllById(String paymentId) {
+        return null;
     }
 
     public boolean delete(String id) {
@@ -115,4 +123,5 @@ public class TherapistDAOImpl {
         }
         return therapyPrograms;
     }
+
 }

@@ -2,6 +2,8 @@ package lk.ijse.ormsmhtc.bo.custom.impl;
 
 
 
+import lk.ijse.ormsmhtc.bo.custom.TherapistBO;
+import lk.ijse.ormsmhtc.dao.DAOFactory;
 import lk.ijse.ormsmhtc.dao.custom.impl.TherapistDAOImpl;
 import lk.ijse.ormsmhtc.dto.TherapistDto;
 import lk.ijse.ormsmhtc.entity.Therapist;
@@ -9,11 +11,11 @@ import lk.ijse.ormsmhtc.entity.Therapist;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TherapistBOImpl {
-    private TherapistDAOImpl therapistDAO = new TherapistDAOImpl();
+public class TherapistBOImpl implements TherapistBO {
+    private TherapistDAOImpl therapistDAO = (TherapistDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPIST);
 
     public ArrayList<TherapistDto> getAllTherapist() {
-        List<Therapist> therapists = therapistDAO.getAllTherapist();
+        List<Therapist> therapists = therapistDAO.getAll();
         ArrayList<TherapistDto> therapistDtoList = new ArrayList<TherapistDto>();
         for (Therapist therapist : therapists) {
             TherapistDto therapistDto = new TherapistDto(

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="754.0" prefWidth="1252.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.ormsmhtc.controller.SettingController">
+   <children>
+      <ImageView fitHeight="746.0" fitWidth="1243.0" layoutX="6.0" layoutY="6.0" opacity="0.51" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assest/backgrounttt.jpg" />
+         </image>
+      </ImageView>
+      <Label alignment="CENTER" layoutX="405.0" layoutY="24.0" prefHeight="56.0" prefWidth="463.0" text="SETTING">
+         <font>
+            <Font name="Georgia Bold" size="40.0" />
+         </font>
+      </Label>
+      <Label layoutX="144.0" layoutY="123.0" prefHeight="28.0" prefWidth="366.0" text="Update Your Password ">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="144.0" layoutY="208.0" prefHeight="27.0" prefWidth="138.0" text="Current Password">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="144.0" layoutY="265.0" prefHeight="27.0" prefWidth="108.0" text="New Password">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="144.0" layoutY="328.0" prefHeight="27.0" prefWidth="135.0" text="Confirm Password">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnUpdate" layoutX="144.0" layoutY="391.0" mnemonicParsing="false" onAction="#updatePasswords" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: black;" text="Update" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Group fx:id="grpCurrentHide" layoutX="300.0" layoutY="208.0" visible="false">
+         <children>
+            <TextField fx:id="txtHidePasswordCurrent" prefHeight="27.0" prefWidth="289.0" promptText="1234jhone#@!" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 5px;" />
+         </children>
+      </Group>
+      <Group fx:id="grpNewHide" layoutX="301.0" layoutY="265.0" visible="false">
+         <children>
+            <TextField fx:id="txtHideNewPassword" prefHeight="27.0" prefWidth="289.0" promptText="1234jhone#@!" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 5px;" />
+         </children>
+      </Group>
+      <Group fx:id="grpConfirmHide" layoutX="302.0" layoutY="328.0" visible="false">
+         <children>
+            <TextField fx:id="txtHideConfirmPassword" prefHeight="27.0" prefWidth="289.0" promptText="1234jhone#@!" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 5px;" />
+         </children>
+      </Group>
+      <Group fx:id="grpCurrent" layoutX="301.0" layoutY="208.0">
+         <children>
+            <PasswordField fx:id="passwordCurrent" prefHeight="27.0" prefWidth="289.0" promptText="1234jhone#@!" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 5px;" />
+         </children>
+      </Group>
+      <Group fx:id="grpNew" layoutX="302.0" layoutY="265.0">
+         <children>
+            <PasswordField fx:id="passwordNew" prefHeight="27.0" prefWidth="289.0" promptText="1234jhone#@!" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 5px;" />
+         </children>
+      </Group>
+      <Group fx:id="grpConfirm" layoutX="302.0" layoutY="328.0">
+         <children>
+            <PasswordField fx:id="passwordConfirm" prefHeight="27.0" prefWidth="289.0" promptText="1234jhone#@!" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 5px;" />
+         </children>
+      </Group>
+      <Label fx:id="errorCurrent" layoutX="592.0" layoutY="212.0" prefHeight="18.0" prefWidth="275.0" textFill="RED" />
+      <Label fx:id="errorNew" layoutX="592.0" layoutY="269.0" prefHeight="18.0" prefWidth="275.0" textFill="RED" />
+      <Label fx:id="errorConfirm" layoutX="592.0" layoutY="332.0" prefHeight="18.0" prefWidth="275.0" textFill="RED" />
+   </children>
+</AnchorPane>

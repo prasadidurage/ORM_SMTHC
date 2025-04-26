@@ -1,6 +1,5 @@
 package lk.ijse.ormsmhtc.controller;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import lk.ijse.ormsmhtc.bo.BOFactory;
 import lk.ijse.ormsmhtc.bo.custom.impl.UserBOImpl;
 import lk.ijse.ormsmhtc.dto.UserDto;
 import lk.ijse.ormsmhtc.dto.tm.UserTM;
@@ -60,7 +60,7 @@ public class UserManageController implements Initializable {
     @FXML
     private Pane userPane;
 
-    UserBOImpl userBO = new UserBOImpl();
+    UserBOImpl userBO = (UserBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.USER);
 
     @FXML
     void deleteProgram(ActionEvent event) {

@@ -1,13 +1,17 @@
 package lk.ijse.ormsmhtc.dao.custom.impl;
+
+
 import lk.ijse.ormsmhtc.config.FactoryConfiguration;
-import lk.ijse.ormsmhtc.entity.*;
+import lk.ijse.ormsmhtc.dao.custom.TherapyProgramDAO;
+import lk.ijse.ormsmhtc.entity.TherapyProgram;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TherapyProgramDAOImpl {
+public class TherapyProgramDAOImpl implements TherapyProgramDAO {
     private FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
     public String getLastId() {
         Session session = factoryConfiguration.getSession();
@@ -17,7 +21,7 @@ public class TherapyProgramDAOImpl {
         return lastId;
     }
 
-    public List<TherapyProgram> getAll() {
+    public ArrayList<TherapyProgram> getAll() {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = null;
         List<TherapyProgram> therapyPrograms = null;
@@ -35,7 +39,7 @@ public class TherapyProgramDAOImpl {
         } finally {
             session.close();
         }
-        return therapyPrograms;
+        return (ArrayList<TherapyProgram>) therapyPrograms;
     }
 
     public boolean save(TherapyProgram therapyProgram) {

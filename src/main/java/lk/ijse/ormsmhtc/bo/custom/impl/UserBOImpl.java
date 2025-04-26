@@ -2,14 +2,16 @@ package lk.ijse.ormsmhtc.bo.custom.impl;
 
 
 
+import lk.ijse.ormsmhtc.bo.custom.UserBO;
+import lk.ijse.ormsmhtc.dao.DAOFactory;
 import lk.ijse.ormsmhtc.dao.custom.impl.UserDAOImpl;
 import lk.ijse.ormsmhtc.dto.UserDto;
 import lk.ijse.ormsmhtc.entity.User;
 
 import java.util.ArrayList;
 
-public class UserBOImpl {
-    private UserDAOImpl userDAO = new UserDAOImpl();
+public class UserBOImpl implements UserBO {
+    private UserDAOImpl userDAO = (UserDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.USER);
     public String getPassword(String username) {
         return userDAO.getPassword(username);
     }
@@ -65,5 +67,32 @@ public class UserBOImpl {
 
     public boolean deleteUser(String userId) {
         return userDAO.delete(userId);
+    }
+
+    public UserDto getAllByUserName(String userName, String password) {
+        User user = userDAO.getAllByUserCredential(userName,password);
+        if (user == null){
+            return null;
+        }
+        return new UserDto(
+                user.getId(),
+                user.getName(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRole(),
+                user.getEmail()
+        );
+    }
+
+    public boolean update(UserDto userDto, String newPwd) {
+        User user = new User(
+                userDto.getId(),
+                userDto.getName(),
+                userDto.getUsername(),
+                newPwd,
+                userDto.getRole(),
+                userDto.getEmail()
+        );
+        return userDAO.update(user);
     }
 }

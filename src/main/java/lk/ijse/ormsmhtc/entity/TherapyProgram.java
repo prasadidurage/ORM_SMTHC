@@ -25,7 +25,7 @@ public class TherapyProgram {
 //    @JoinColumn(name = "therapist_id")
 //    private Therapist therapist;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
     private List<Payment> payments;
 
     @OneToMany(mappedBy = "therapyProgram", cascade = CascadeType.ALL)

@@ -11,12 +11,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import lk.ijse.ormsmhtc.bo.BOFactory;
 import lk.ijse.ormsmhtc.bo.custom.impl.PatientBOImpl;
 import lk.ijse.ormsmhtc.bo.custom.impl.PaymentBOImpl;
 import lk.ijse.ormsmhtc.bo.custom.impl.TherapyProgramBOImpl;
 import lk.ijse.ormsmhtc.bo.custom.impl.TherapySessionBOImpl;
 import lk.ijse.ormsmhtc.dto.PaymentDto;
 import lk.ijse.ormsmhtc.dto.tm.PaymentTM;
+import lk.ijse.ormsmhtc.util.Validation;
+//import net.sf.jasperreports.engine.*;
+//import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+//import net.sf.jasperreports.view.JasperViewer;
 
 import java.net.URL;
 import java.sql.Date;
@@ -100,10 +105,10 @@ public class PaymentController implements Initializable {
     @FXML
     private Pane userPane;
 
-    PatientBOImpl patientBO = new PatientBOImpl();
-    TherapySessionBOImpl therapySessionBO = new TherapySessionBOImpl();
-    PaymentBOImpl paymentBO = new PaymentBOImpl();
-    TherapyProgramBOImpl therapyProgramBO = new TherapyProgramBOImpl();
+    PatientBOImpl patientBO = (PatientBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
+    TherapySessionBOImpl therapySessionBO = (TherapySessionBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_SESSION);
+    PaymentBOImpl paymentBO = (PaymentBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
+    TherapyProgramBOImpl therapyProgramBO = (TherapyProgramBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
 
     @FXML
     void deletePayment(ActionEvent event) {
@@ -132,23 +137,40 @@ public class PaymentController implements Initializable {
         String installment = txtInstallment.getText();
         String status = txtStatus.getText();
         Date date = Date.valueOf(datePicker.getValue());
-        PaymentDto paymentDto = new PaymentDto(
-                paymentId,
-                amount,
-                installment,
-                status,
-                balance,
-                date,
-                patientId,
-                programId,
-                sessionId
-        );
-        boolean isSave = paymentBO.savePayment(paymentDto);
-        if (isSave){
-            new Alert(Alert.AlertType.INFORMATION,"Payment Done Successfully").show();
-            refreshPage();
+        boolean isValidAmount = Validation.isValid(String.valueOf(amount),"price");
+        boolean isValidBalance = Validation.isValid(String.valueOf(balance),"price");
+        if (!isValidAmount){
+            txtAmount.setStyle("-fx-border-color: red");
         }else {
-            new Alert(Alert.AlertType.INFORMATION,"Payment Done Not Successfully").show();
+            txtAmount.setStyle("-fx-border-color: black");
+        }
+        if (!isValidBalance){
+            txtBalance.setStyle("-fx-border-color: red");
+        }else {
+            txtBalance.setStyle("-fx-border-color: black");
+        }
+
+        if (isValidAmount && isValidBalance && !paymentId.isEmpty() && !programId.isEmpty() && !patientId.isEmpty() && !installment.isEmpty() && !status.isEmpty()) {
+            PaymentDto paymentDto = new PaymentDto(
+                    paymentId,
+                    amount,
+                    installment,
+                    status,
+                    balance,
+                    date,
+                    patientId,
+                    programId,
+                    sessionId
+            );
+            boolean isSave = paymentBO.savePayment(paymentDto);
+            if (isSave) {
+                new Alert(Alert.AlertType.INFORMATION, "Payment Done Successfully").show();
+                refreshPage();
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Payment Done Not Successfully").show();
+            }
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Invalid Or null input").show();
         }
     }
 
@@ -161,10 +183,15 @@ public class PaymentController implements Initializable {
     void setBalance(KeyEvent event) {
         try {
             String programID = cmbProgramId.getSelectionModel().getSelectedItem();
-            if (programID == null) {
+            String patientID = cmbPatientId.getSelectionModel().getSelectedItem();
+            if (programID == null || patientID == null) {
                 programID = cmbProgramId.getValue();
+                patientID = cmbPatientId.getValue();
             }
-            double fee = therapyProgramBO.getFee(programID);
+            double fee = paymentBO.getBalance(programID,patientID);
+            if ( String.valueOf(fee).isEmpty()){
+                fee = therapyProgramBO.getFee(programID);
+            }
             System.out.println(fee);
             double amount = (!txtAmount.getText().trim().isEmpty())
                     ? Double.parseDouble(txtAmount.getText().trim())
@@ -209,7 +236,22 @@ public class PaymentController implements Initializable {
         String installment = txtInstallment.getText();
         String status = txtStatus.getText();
         Date date = Date.valueOf(datePicker.getValue());
-        PaymentDto paymentDto = new PaymentDto(
+        boolean isValidAmount = Validation.isValid(String.valueOf(amount),"price");
+        boolean isValidBalance = Validation.isValid(String.valueOf(balance),"price");
+        if (!isValidAmount){
+            txtAmount.setStyle("-fx-border-color: red");
+        }else {
+            txtAmount.setStyle("-fx-border-color: black");
+        }
+        if (!isValidBalance){
+            txtBalance.setStyle("-fx-border-color: red");
+        }else {
+            txtBalance.setStyle("-fx-border-color: black");
+        }
+
+        if (isValidAmount && isValidBalance && !paymentId.isEmpty() && !programId.isEmpty() && !patientId.isEmpty() && !installment.isEmpty() && !status.isEmpty()) {
+
+            PaymentDto paymentDto = new PaymentDto(
                 paymentId,
                 amount,
                 installment,
@@ -226,6 +268,9 @@ public class PaymentController implements Initializable {
             refreshPage();
         }else {
             new Alert(Alert.AlertType.INFORMATION,"Payment Update Not Successfully").show();
+        }
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Invalid Or null input").show();
         }
     }
 
@@ -305,4 +350,22 @@ public class PaymentController implements Initializable {
         btnDelete.setDisable(true);
         btnUpdate.setDisable(true);
     }
+
+//    public void generateInvoice(String paymentId) throws Exception {
+//        JasperReport jasperReport = JasperCompileManager.compileReport("/report/invoice.jrxml");
+//
+//        // Get payment data from DAO
+//        ArrayList<PaymentDto>  data = paymentBO.fondByPaymentId(paymentId);
+//
+//
+//        // Create data source
+//        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data);
+//
+//        // Fill report (no parameters)
+//        JasperPrint print = JasperFillManager.fillReport(jasperReport, null, dataSource);
+//
+//        // View or export
+//        JasperViewer.viewReport(print, false);
+//        JasperExportManager.exportReportToPdfFile(print, "invoices/" + paymentId + ".pdf");
+//    }
 }

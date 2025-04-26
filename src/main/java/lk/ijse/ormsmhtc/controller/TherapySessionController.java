@@ -10,11 +10,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import lk.ijse.ormsmhtc.bo.BOFactory;
 import lk.ijse.ormsmhtc.bo.custom.impl.*;
-import lk.ijse.ormsmhtc.dto.Custom;
+import lk.ijse.ormsmhtc.dto.CustomDto;
 import lk.ijse.ormsmhtc.dto.TherapySessionDTO;
 import lk.ijse.ormsmhtc.dto.tm.TherapistAvailableTimeTM;
 import lk.ijse.ormsmhtc.dto.tm.TherapySessionTM;
+import lk.ijse.ormsmhtc.util.Validation;
 
 import java.net.URL;
 import java.sql.Date;
@@ -101,12 +103,12 @@ public class TherapySessionController implements Initializable {
     @FXML
     private Pane userPane;
 
-    TherapySessionBOImpl therapySessionBO = new TherapySessionBOImpl();
-    TherapyProgramBOImpl therapyProgramBO = new TherapyProgramBOImpl();
-    PatientBOImpl patientBO = new PatientBOImpl();
-    TherapistBOImpl therapistBO = new TherapistBOImpl();
-    TherapistProgramBOImpl therapistProgramBO = new TherapistProgramBOImpl();
-    PatientProgramBOImpl patientProgramBO = new PatientProgramBOImpl();
+    TherapySessionBOImpl therapySessionBO = (TherapySessionBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_SESSION);
+    TherapyProgramBOImpl therapyProgramBO = (TherapyProgramBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
+    PatientBOImpl patientBO = (PatientBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
+    TherapistBOImpl therapistBO = (TherapistBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST);
+    TherapistProgramBOImpl therapistProgramBO = (TherapistProgramBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST_PROGRAM);
+    PatientProgramBOImpl patientProgramBO = (PatientProgramBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT_PROGRAM);
 
     @FXML
     void addSession(ActionEvent event) {
@@ -118,26 +120,56 @@ public class TherapySessionController implements Initializable {
         String start = txtStartTime.getText().trim();
         String end = txtEndTime.getText().trim();
 
-        if (start.matches("\\d{2}:\\d{2}")) start += ":00";
-        if (end.matches("\\d{2}:\\d{2}")) end += ":00";
+        boolean isCorrectStartTime = Validation.isValid(start,"time");
+        boolean isCorrectEndTime = Validation.isValid(end,"time");
 
-        Time startTime = Time.valueOf(start);
-        Time endTime = Time.valueOf(end);
-        TherapySessionDTO therapySessionDTO = new TherapySessionDTO(
-                sessionId,
-                date,
-                startTime,
-                endTime,
-                therapistId,
-                patientId,
-                programId
-        );
-        boolean isSave = therapySessionBO.saveTherapySession(therapySessionDTO);
-        if (isSave){
-            new Alert(Alert.AlertType.INFORMATION,"Therapy Session Save Successful").show();
-            refreshPage();
+        if (!isCorrectStartTime){
+            txtStartTime.setStyle("-fx-border-color: red");
         }else {
-            new Alert(Alert.AlertType.INFORMATION,"Therapy Session not Save Successful").show();
+            txtStartTime.setStyle("-fx-border-color: black");
+        }
+
+        if (!isCorrectEndTime){
+            txtEndTime.setStyle("-fx-border-color: red");
+        }else {
+            txtEndTime.setStyle("-fx-border-color: black");
+        }
+
+        if (isCorrectStartTime && isCorrectEndTime && !sessionId.isEmpty() && !patientId.isEmpty() && !programId.isEmpty() && !therapistId.isEmpty()) {
+            String formattedStart = formatToSqlTime(start);
+            String formattedEnd = formatToSqlTime(end);
+            Time startTime = Time.valueOf(formattedStart);
+            Time endTime = Time.valueOf(formattedEnd);
+            TherapySessionDTO therapySessionDTO = new TherapySessionDTO(
+                    sessionId,
+                    date,
+                    startTime,
+                    endTime,
+                    therapistId,
+                    patientId,
+                    programId
+            );
+            boolean isSave = therapySessionBO.saveTherapySession(therapySessionDTO);
+            if (isSave) {
+                new Alert(Alert.AlertType.INFORMATION, "Therapy Session Save Successful").show();
+                refreshPage();
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Therapy Session not Save Successful").show();
+            }
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Invalid or null input").show();
+        }
+    }
+
+    String formatToSqlTime(String time) {
+        if (time == null) return null;
+
+        if (time.matches("^\\d{2}:\\d{2}$")) {
+            return time + ":00";
+        } else if (time.matches("^\\d{2}:\\d{2}:\\d{2}$")) {
+            return time;
+        } else {
+            return null;
         }
     }
 
@@ -167,30 +199,46 @@ public class TherapySessionController implements Initializable {
         String start = txtStartTime.getText().trim();
         String end = txtEndTime.getText().trim();
 
-        if (start.matches("\\d{2}:\\d{2}")) start += ":00";
-        if (end.matches("\\d{2}:\\d{2}")) end += ":00";
+        boolean isCorrectStartTime = Validation.isValid(start,"time");
+        boolean isCorrectEndTime = Validation.isValid(end,"time");
 
-        Time startTime = Time.valueOf(start);
-        Time endTime = Time.valueOf(end);
-        TherapySessionDTO therapySessionDTO = new TherapySessionDTO(
-                sessionId,
-                date,
-                startTime,
-                endTime,
-                therapistId,
-                patientId,
-                programId
-        );
-        boolean isUpdate = therapySessionBO.updateTherapySession(therapySessionDTO);
-        if (isUpdate){
-            new Alert(Alert.AlertType.INFORMATION,"Therapy Session Update Successful").show();
-            refreshPage();
+        if (!isCorrectStartTime){
+            txtStartTime.setStyle("-fx-border-color: red");
         }else {
-            new Alert(Alert.AlertType.INFORMATION,"Therapy Session Update Not Successful").show();
+            txtStartTime.setStyle("-fx-border-color: black");
+        }
+
+        if (!isCorrectEndTime){
+            txtEndTime.setStyle("-fx-border-color: red");
+        }else {
+            txtEndTime.setStyle("-fx-border-color: black");
+        }
+
+        if (isCorrectStartTime && isCorrectEndTime && !sessionId.isEmpty() && !patientId.isEmpty() && !programId.isEmpty() && !therapistId.isEmpty()) {
+            String formattedStart = formatToSqlTime(start);
+            String formattedEnd = formatToSqlTime(end);
+            Time startTime = Time.valueOf(formattedStart);
+            Time endTime = Time.valueOf(formattedEnd);
+            TherapySessionDTO therapySessionDTO = new TherapySessionDTO(
+                    sessionId,
+                    date,
+                    startTime,
+                    endTime,
+                    therapistId,
+                    patientId,
+                    programId
+            );
+            boolean isUpdate = therapySessionBO.updateTherapySession(therapySessionDTO);
+            if (isUpdate) {
+                new Alert(Alert.AlertType.INFORMATION, "Therapy Session Update Successful").show();
+                refreshPage();
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Therapy Session Update Not Successful").show();
+            }
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Invalid or null input").show();
         }
     }
-
-
 
     @FXML
     void resetPage(ActionEvent event) {
@@ -318,12 +366,12 @@ public class TherapySessionController implements Initializable {
     public void setTimeTable(){
         String programId = cmbProgramId.getSelectionModel().getSelectedItem();
         String therapistId = cmbTherapistId.getSelectionModel().getSelectedItem();
-        ArrayList<Custom> customs = therapySessionBO.getAvailableTime(programId,therapistId);
+        ArrayList<CustomDto> customDtos = therapySessionBO.getAvailableTime(programId,therapistId);
         ObservableList<TherapistAvailableTimeTM> timeTMS = FXCollections.observableArrayList();
-        for (Custom custom : customs){
+        for (CustomDto customDto : customDtos){
             TherapistAvailableTimeTM timeTM = new TherapistAvailableTimeTM(
-                    custom.getDate(),
-                    custom.getTime()
+                    customDto.getDate(),
+                    customDto.getTime()
             );
             timeTMS.add(timeTM);
         }
